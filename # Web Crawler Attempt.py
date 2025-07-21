@@ -1,4 +1,4 @@
-# Web Crawler Attempt
+# Web Crawler
 
 # necessary libraries for GUI of web crawler.
 
@@ -46,6 +46,7 @@ class WebCrawlerApp:
         self.results_text.insert(tk.END, "Starting Crawl...\n")
 
         thread = threading.Thread(target=self.crawl, args=(url,))
+        thread.start()
 
 # Method gets URL from entry widget.
 # Checls if URL valid & not empty.
