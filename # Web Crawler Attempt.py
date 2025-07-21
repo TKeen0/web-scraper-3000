@@ -96,11 +96,11 @@ class WebCrawlerApp:
         df = pd.DataFrame(books)
         df.to_csv('books.csv', index=False)
 
-        def display_results(self, books):
-            self.results_text.insert(tk.END, "Crawl completed. Books extracted:\n")
-            for book in books:
-                self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
-                self.results_results_text.insert(tk.END, "Books saved to books.csv\n")
+    def display_results(self, books):
+        self.results_text.insert(tk.END, "Crawl completed. Books extracted:\n")
+        for book in books:
+            self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
+            self.results_results_text.insert(tk.END, "Books saved to books.csv\n")
 
 # Method checks if there are any quotes to save.
 # Saves the DataFrame to a csv file quotes.csv.
