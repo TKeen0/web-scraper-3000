@@ -78,7 +78,7 @@ class WebCrawlerApp:
             # Show success message if data saved, otherwise an error message if no quotes to save.
 
 
-    if __name__ == "__main__":
-        root = tk.Tk() # Initialises main application window using Tkinter.
-        app = WebCrawlerApp(root)
-        root.mainloop() # root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.  
+if __name__ == "__main__":
+    root = tk.Tk() # Initialises main application window using Tkinter.
+    app = WebCrawlerApp(root)
+    root.mainloop() # root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.  
