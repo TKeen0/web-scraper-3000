@@ -62,7 +62,7 @@ class WebCrawlerApp:
         for book in book_elements:  
             title = book.h3.a['title']  # Extracts book title from h2 element tag.
             price = book.select_one('.price_color').get_text(strip=True)
-            books.append({'tite': title, 'price': price})
+            books.append({'title': title, 'price': price})
         return books
         # Method returns list of dictionaries containing book titles & prices.
 
