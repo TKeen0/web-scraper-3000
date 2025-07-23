@@ -74,7 +74,7 @@ class WebCrawlerApp:
         self.results_text.insert(tk.END, "Crawl completed. Books extracted:\n") # 
         for book in books:
             self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
-            self.results_results_text.insert(tk.END, "Books saved to books.csv\n")
+            self.results_text.insert(tk.END, "Books saved to books.csv\n")
             # Show success message if data saved, otherwise an error message if no quotes to save.
 
 
