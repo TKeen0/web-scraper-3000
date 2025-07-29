@@ -40,6 +40,7 @@ class WebCrawlerApp:
         try:
             response = requests.get(url) # Fetch web page.
             response.raise_for_status() # Checks for successful request.
+            response.encoding = 'utf-8' # Stop's £ being misinterpreted.
 
             soup = BeautifulSoup(response.text, 'html.parser') # Parses HTML content.
             books = self.extract_books(soup) # Extracts book data from the page.
