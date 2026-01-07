@@ -66,7 +66,7 @@ class WebScraperApp:
 
     def scrape(self, url):
         try:
-            response = requests.get(url) # Fetch web page.
+            response = requests.get(url, timeout=(3, 10)) # Fetch web page.
             response.raise_for_status() # Checks for successful request.
             response.encoding = 'utf-8' # Stop's £ being misinterpreted.
 
