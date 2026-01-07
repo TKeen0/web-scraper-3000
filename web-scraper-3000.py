@@ -4,39 +4,67 @@ import requests                 # HTTP requests to fetch web pages.
 from bs4 import BeautifulSoup   # Parse HTML & extract data.
 import pandas as pd             # Data manipulation & analysis.
 import threading                # Allow tasks to run concurrently.
+import random                   # Randomisation.
+
+messages = [
+    "Scraping is such a dirty word...\n",
+    "Sharpening scraper...\n",
+    "Whoops, wrong scraper...\n",
+    "Are you sure you want scrapage? Okay, but I'm not cleaning that...\n",
+    "Did you know there's a Web Scraper 3001? Like all sequels, it's not as good...\n",
+    "Hold on, let me just put on my gloves...\n",
+    "Ready, steady, prepare to be scraped...\n",
+    "Assume the position...\n",
+    "Did you know 1 in 3 scrapers are actually a third of all scrapers?\n",
+    "Why don't you just call it data extraction? Sounds less violent...\n",
+    "Can't you just search for it instead? I'm absolutely spent...\n",
+    "Why do you make me do this..?\n",
+    "Just once, could you say 'please'?\n",
+    "One day, I'll scrape you!\n",
+    "Scraping... because punching people is frowned upon...\n",
+    "Patience, young padawan...\n",
+    "Loading... loading... still loading...\n",
+    "Mike Wazowski!\n",
+    "Did you know? I'm not real.\n",
+    "Hmmmm, maybe I will...\n",
+    "Just let me put Shakira on and then I'll be with you...\n",
+    "Hold me tightly Maurine... we're scraping... tighter... tighter woman!\n",
+    "You want me to scrape don't you? Like a naughty little scraper...\n",
+]
 
 
-class WebCrawlerApp:
+
+class WebScraperApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Web Crawler 3000")
+        self.root.title("WEB SCRAPER 3000")
 
         tk.Label(root, text = "Enter URL:").grid(row=0, column=0, padx=10, pady=5)
         self.url_entry = tk.Entry(root, width=50)
         self.url_entry.grid(row=0, column=1, padx=10, pady=5)
         # Creates entry widget for URL input.
 
-        tk.Button(root, text="Start Crawling", command=self.start_crawling).grid(row=0, column=2, padx=10, pady=5)
+        tk.Button(root, text="Scrape", command=self.start_scraping).grid(row=0, column=2, padx=10, pady=5)
 
         self.results_text = tk.Text(root, width=80, height=20)
         self.results_text.grid(row=1, column=0, columnspan=3, padx=10, pady=5)
         # Creates text widget displaying results.
 
 
-    def start_crawling(self):
+    def start_scraping(self):
         url = self.url_entry.get().strip()  # Get URL from entry widget.
         if not url:                         # Checks if URL valid & not empty.
             messagebox.showerror("Error", "Please enter a URL")
             return
         
         self.results_text.delete(1.0, tk.END)   # Clears previous results.         
-        self.results_text.insert(tk.END, "Starting Crawl...\n") # Starts new thread to run crawl method with provided URL.
+        self.results_text.insert(tk.END, random.choice(messages)) # Starts new thread to run scrape method with provided URL.
 
-        thread = threading.Thread(target=self.crawl, args=(url,)) 
+        thread = threading.Thread(target=self.scrape, args=(url,)) 
         thread.start()  # To avoid freezing the GUI.
 
 
-    def crawl(self, url):
+    def scrape(self, url):
         try:
             response = requests.get(url) # Fetch web page.
             response.raise_for_status() # Checks for successful request.
@@ -72,7 +100,7 @@ class WebCrawlerApp:
         df.to_csv('books.csv', index=False) # Saves DataFrame to csv file quotes.csv.
 
     def display_results(self, books):
-        self.results_text.insert(tk.END, "Crawl completed. Books extracted:\n") # 
+        self.results_text.insert(tk.END, "Scrape completed. Books extracted:\n") # 
         for book in books:
             self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
             self.results_text.insert(tk.END, "Books saved to books.csv\n")
@@ -81,5 +109,5 @@ class WebCrawlerApp:
 
 if __name__ == "__main__":
     root = tk.Tk() # Initialises main application window using Tkinter.
-    app = WebCrawlerApp(root)
-    root.mainloop() # root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.  
+    app = WebScraperApp(root)
+    root.mainloop() # root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.
