@@ -6,6 +6,7 @@ import pandas as pd             # Data manipulation & analysis.
 import threading                # Allow tasks to run concurrently.
 import random                   # Randomisation.
 
+
 messages = [
     "Scraping is such a dirty word...\n",
     "Sharpening scraper...\n",
@@ -32,7 +33,9 @@ messages = [
     "You want me to scrape don't you? Like a naughty little scraper...\n",
 ]
 
-
+headers = {
+    "User-Agent": "WebScraper3000/1.0 (educational use only)"
+}
 
 class WebScraperApp:
     def __init__(self, root):
@@ -66,7 +69,7 @@ class WebScraperApp:
 
     def scrape(self, url):
         try:
-            response = requests.get(url, timeout=(3, 10)) # Fetch web page.
+            response = requests.get(url, headers=headers, timeout=(3, 10)) # Fetch web page.
             response.raise_for_status() # Checks for successful request.
             response.encoding = 'utf-8' # Stop's £ being misinterpreted.
 
