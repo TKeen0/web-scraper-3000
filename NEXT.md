@@ -1,9 +1,5 @@
 NEXT.md
 
-#1. Randomise beginning search message with a few different humorous quips. 
-
-2. Timeouts.
-
 3. User-Agent.
 
 4. Error handling.
