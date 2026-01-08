@@ -1,6 +1,7 @@
 import tkinter as tk            # GUI.
 from tkinter import messagebox  # Display messages in dialogue boxes.
 import requests                 # HTTP requests to fetch web pages.
+from requests import HTTPError
 from bs4 import BeautifulSoup   # Parse HTML & extract data.
 import pandas as pd             # Data manipulation & analysis.
 import threading                # Allow tasks to run concurrently.
@@ -62,8 +63,14 @@ class WebScraperApp:
         except requests.Timeout:
             self.root.after(0, lambda: self.results_text.insert(tk.END, "Request timed out.\n"))
             return
+        except requests.HTTPError as e:
+            status = e.response.status_code
+            self.root.after(0, lambda e=e: self.results_text.insert(tk.END, f"HTTP error {status} while fetching {url}\n"))
+            return
         except requests.RequestException as e:
-            self.root.after(0, lambda: self.results_text.insert(tk.END, f"Error fetching {url}: {e}\n"))
+            # Bind the exception to a default lambda argument so the
+            # exception value remains available when the callback runs.
+            self.root.after(0, lambda e=e: self.results_text.insert(tk.END, f"Error fetching {url}: {e}\n"))
             return
 
         soup = BeautifulSoup(response.text, 'html.parser') # Parses HTML content.
