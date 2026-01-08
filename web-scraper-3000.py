@@ -9,25 +9,12 @@ import random                   # Randomisation.
 
 messages = [
     "Scraping is such a dirty word...\n",
-    "Sharpening scraper...\n",
-    "Whoops, wrong scraper...\n",
     "Are you sure you want scrapage? Okay, but I'm not cleaning that...\n",
     "Did you know there's a Web Scraper 3001? Like all sequels, it's not as good...\n",
-    "Hold on, let me just put on my gloves...\n",
-    "Ready, steady, prepare to be scraped...\n",
-    "Assume the position...\n",
-    "Did you know 1 in 3 scrapers are actually a third of all scrapers?\n",
     "Why don't you just call it data extraction? Sounds less violent...\n",
-    "Can't you just search for it instead? I'm absolutely spent...\n",
     "Why do you make me do this..?\n",
-    "Just once, could you say 'please'?\n",
-    "One day, I'll scrape you!\n",
     "Scraping... because punching people is frowned upon...\n",
-    "Patience, young padawan...\n",
-    "Loading... loading... still loading...\n",
     "Mike Wazowski!\n",
-    "Did you know? I'm not real.\n",
-    "Hmmmm, maybe I will...\n",
     "Just let me put Shakira on and then I'll be with you...\n",
     "Hold me tightly Maurine... we're scraping... tighter... tighter woman!\n",
     "You want me to scrape don't you? Like a naughty little scraper...\n",
@@ -63,7 +50,7 @@ class WebScraperApp:
         self.results_text.delete(1.0, tk.END)   # Clears previous results.         
         self.results_text.insert(tk.END, random.choice(messages)) # Starts new thread to run scrape method with provided URL.
 
-        thread = threading.Thread(target=self.scrape, args=(url,)) 
+        thread = threading.Thread(target=self.scrape, args=(url,), daemon=True) 
         thread.start()  # To avoid freezing the GUI.
 
 
@@ -72,18 +59,21 @@ class WebScraperApp:
             response = requests.get(url, headers=headers, timeout=(3, 10)) # Fetch web page.
             response.raise_for_status() # Checks for successful request.
             response.encoding = 'utf-8' # Stop's £ being misinterpreted.
+        except requests.Timeout:
+            self.root.after(0, lambda: self.results_text.insert(tk.END, "Request timed out.\n"))
+            return
+        except requests.RequestException as e:
+            self.root.after(0, lambda: self.results_text.insert(tk.END, f"Error fetching {url}: {e}\n"))
+            return
 
-            soup = BeautifulSoup(response.text, 'html.parser') # Parses HTML content.
-            books = self.extract_books(soup) # Extracts book data from the page.
+        soup = BeautifulSoup(response.text, 'html.parser') # Parses HTML content.
+        books = self.extract_books(soup) # Extracts book data from the page.
 
-            if books:
+        if books:
                 self.save_to_csv(books) # Adds 'save to csv' button to save results.
                 self.display_results(books) # Displays extracted book data in the text widget.
-            else:
-                self.results_text.insert(tk.END, "No books were extracted.\n")
-
-        except requests.RequestException as e:
-            self.results_text.insert(tk.END, f"Error fetching {url}: {e}\n")
+        else:
+                self.root.after(0, lambda: self.results_text.insert(tk.END, "No books were extracted.\n"))
 
 
     def extract_books(self, soup):
@@ -103,11 +93,15 @@ class WebScraperApp:
         df.to_csv('books.csv', index=False) # Saves DataFrame to csv file quotes.csv.
 
     def display_results(self, books):
-        self.results_text.insert(tk.END, "Scrape completed. Books extracted:\n") # 
-        for book in books:
-            self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
+        def update():
+            self.results_text.insert(tk.END, "Scrape completed. Books extracted:\n") # 
+            for book in books:
+                self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
+                
             self.results_text.insert(tk.END, "Books saved to books.csv\n")
             # Show success message if data saved, otherwise an error message if no quotes to save.
+
+        self.root.after(0, update)
 
 
 if __name__ == "__main__":
