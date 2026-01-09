@@ -1,9 +1,7 @@
-NEXT.md
+# NEXT.md
 
-4. Error handling.
+1. Configurable selectors.
 
-5. Configurable selectors.
+2. CLI option.
 
-6. CLI option.
-
-7. Tests.
+3. Tests.
