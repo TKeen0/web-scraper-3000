@@ -21,16 +21,22 @@ This scraper parses books.toscrape.com and websites with a similar structure to 
 
 ## Usage
 
-Type any website url into the search box and specify what items you wish to parse for. ***Note that some websites do not allow scrapers to run.***
+Launch the app and enter a books.toscrape.com-style URL and click ***Scrape*** to extract book titles and prices to a CSV file.
+
+## Limitations
+
+- Designed for books.toscrape.com and sites with a similar HTML structure.
+- Not intended for large-scale or commercial scraping.
+- Some websites may block automated requests.
 
 ## Contributing
 
-Feel free to submit pull request or open issues.
+This project is a small educational project only. Feel free to submit pull requests or open issues. There is no guarantee of response.
 
 ## License
 
-MIT License.
+MIT License
 
 ## Contact
 
-Email: <tkeen1@outlook.com>
+<tkeen1@outlook.com>
