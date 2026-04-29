@@ -1,7 +1,8 @@
+"""Web Scraper 3000 - A GUI application for scraping book data from websites."""
+
 import tkinter as tk            # GUI.
 from tkinter import messagebox  # Display messages in dialogue boxes.
 import requests                 # HTTP requests to fetch web pages.
-from requests import HTTPError
 from bs4 import BeautifulSoup   # Parse HTML & extract data.
 import pandas as pd             # Data manipulation & analysis.
 import threading                # Allow tasks to run concurrently.
@@ -77,10 +78,10 @@ class WebScraperApp:
         books = self.extract_books(soup) # Extracts book data from the page.
 
         if books:
-                self.save_to_csv(books) # Adds 'save to csv' button to save results.
-                self.display_results(books) # Displays extracted book data in the text widget.
+            self.save_to_csv(books) # Adds 'save to csv' button to save results.
+            self.display_results(books) # Displays extracted book data in the text widget.
         else:
-                self.root.after(0, lambda: self.results_text.insert(tk.END, "No books were extracted.\n"))
+            self.root.after(0, lambda: self.results_text.insert(tk.END, "No books were extracted.\n"))
 
 
     def extract_books(self, soup):
@@ -112,6 +113,6 @@ class WebScraperApp:
 
 
 if __name__ == "__main__":
-    root = tk.Tk() # Initialises main application window using Tkinter.
-    app = WebScraperApp(root)
-    root.mainloop() # root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.
+    app_root = tk.Tk() # Initialises main application window using Tkinter.
+    app = WebScraperApp(app_root)
+    app_root.mainloop() # app_root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.

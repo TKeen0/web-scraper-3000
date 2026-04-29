@@ -4,4 +4,4 @@
 
 2. CLI option.
 
-3. Tests.
+3. Tests
