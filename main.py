@@ -1,13 +1,12 @@
 """Web Scraper 3000 - A GUI application for scraping book data from websites."""
 
+import threading                # Allow tasks to run concurrently.
+import random                   # Randomisation.
 import tkinter as tk            # GUI.
 from tkinter import messagebox  # Display messages in dialogue boxes.
 import requests                 # HTTP requests to fetch web pages.
 from bs4 import BeautifulSoup   # Parse HTML & extract data.
 import pandas as pd             # Data manipulation & analysis.
-import threading                # Allow tasks to run concurrently.
-import random                   # Randomisation.
-
 
 messages = [
     "Scraping is such a dirty word...\n",
@@ -28,6 +27,8 @@ headers = {
 
 
 class WebScraperApp:
+    """A GUI application for scraping book data from websites."""
+
     def __init__(self, root):
         self.root = root
         self.root.title("WEB SCRAPER 3000")
@@ -37,7 +38,7 @@ class WebScraperApp:
         self.url_entry.grid(row=0, column=1, padx=10, pady=5)
         # Creates entry widget for URL input.
 
-        tk.Button(root, text="Scrape", command=self.start_scraping).grid(row=0, column=2, padx=10, pady=5)
+        tk.Button(root,text="Scrape",command=self.start_scraping).grid(row=0,column=2,padx=10,pady=5)
 
         self.results_text = tk.Text(root, width=80, height=20)
         self.results_text.grid(row=1, column=0, columnspan=3, padx=10, pady=5)
