@@ -26,6 +26,7 @@ headers = {
     "User-Agent": "WebScraper3000/1.0 (educational use only)"
 }
 
+
 class WebScraperApp:
     def __init__(self, root):
         self.root = root
