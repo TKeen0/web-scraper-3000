@@ -8,6 +8,7 @@ import requests                 # HTTP requests to fetch web pages.
 from bs4 import BeautifulSoup   # Parse HTML & extract data.
 import pandas as pd             # Data manipulation & analysis.
 
+
 messages = [
     "Scraping is such a dirty word...\n",
     "Are you sure you want scrapage? Okay, but I'm not cleaning that...\n",
@@ -46,23 +47,35 @@ class WebScraperApp:
 
 
     def start_scraping(self):
-        url = self.url_entry.get().strip()  # Get URL from entry widget.
-        if not url:                         # Checks if URL valid & not empty.
+        """Start the scraping process in a separate thread."""
+
+        url = self.url_entry.get().strip()
+        # Get URL from entry widget.
+        if not url:
+            # Checks if URL valid & not empty.
             messagebox.showerror("Error", "Please enter a URL")
             return
-        
-        self.results_text.delete(1.0, tk.END)   # Clears previous results.         
-        self.results_text.insert(tk.END, random.choice(messages)) # Starts new thread to run scrape method with provided URL.
 
-        thread = threading.Thread(target=self.scrape, args=(url,), daemon=True) 
-        thread.start()  # To avoid freezing the GUI.
+        self.results_text.delete(1.0, tk.END)
+        # Clears previous results.
+        self.results_text.insert(tk.END, random.choice(messages))
+        # Starts new thread to run scrape method with provided URL.
+
+        thread = threading.Thread(target=self.scrape, args=(url,), daemon=True)
+        thread.start()
+        # To avoid freezing the GUI.
 
 
     def scrape(self, url):
+        """Scrape the provided URL and extract book data."""
+
         try:
-            response = requests.get(url, headers=headers, timeout=(3, 10)) # Fetch web page.
-            response.raise_for_status() # Checks for successful request.
-            response.encoding = 'utf-8' # Stop's £ being misinterpreted.
+            response = requests.get(url, headers=headers, timeout=(3, 10))
+            # Fetch web page.
+            response.raise_for_status()
+            # Checks for successful request.
+            response.encoding = 'utf-8'
+            # Stop's £ being misinterpreted.
         except requests.Timeout:
             self.root.after(0, lambda: self.results_text.insert(tk.END, "Request timed out.\n"))
             return
@@ -76,38 +89,52 @@ class WebScraperApp:
             self.root.after(0, lambda e=e: self.results_text.insert(tk.END, f"Error fetching {url}: {e}\n"))
             return
 
-        soup = BeautifulSoup(response.text, 'html.parser') # Parses HTML content.
-        books = self.extract_books(soup) # Extracts book data from the page.
+        soup = BeautifulSoup(response.text, 'html.parser')
+        # Parses HTML content.
+        books = self.extract_books(soup)
+        # Extracts book data from the page.
 
         if books:
-            self.save_to_csv(books) # Adds 'save to csv' button to save results.
-            self.display_results(books) # Displays extracted book data in the text widget.
+            self.save_to_csv(books)
+            # Adds 'save to csv' button to save results.
+            self.display_results(books)
+            # Displays extracted book data in the text widget.
         else:
             self.root.after(0, lambda: self.results_text.insert(tk.END, "No books were extracted.\n"))
 
 
     def extract_books(self, soup):
-        books = []  # Initialises empty list to store book data.
-        book_elements = soup.select('.product_pod') # Finds all book elements in the HTML.
+        """Extracts book titles and prices from the parsed HTML."""
+
+        books = []
+        # Initialises empty list to store book data.
+        book_elements = soup.select('.product_pod')
+        # Finds all book elements in the HTML.
         print(f"Found {len(book_elements)} book elements.")
 
-        for book in book_elements:  
-            title = book.h3.a['title']  # Extracts book title from h2 element tag.
+        for book in book_elements:
+            title = book.h3.a['title']
+            # Extracts book title from h2 element tag.
             price = book.select_one('.price_color').get_text(strip=True)
             books.append({'title': title, 'price': price})
         return books
         # Method returns list of dictionaries containing book titles & prices.
 
     def save_to_csv(self, books):
+        """Saves the extracted book data to a CSV file."""
+
         df = pd.DataFrame(books)
-        df.to_csv('books.csv', index=False) # Saves DataFrame to csv file quotes.csv.
+        df.to_csv('books.csv', index=False)
+        # Saves DataFrame to csv file quotes.csv.
 
     def display_results(self, books):
+        """Displays the extracted book data in the text widget."""
+
         def update():
-            self.results_text.insert(tk.END, "Scrape completed. Books extracted:\n") # 
+            self.results_text.insert(tk.END, "Scrape completed. Books extracted:\n")
             for book in books:
                 self.results_text.insert(tk.END, f"Title: {book['title']}, Price: {book['price']}\n")
-                
+
             self.results_text.insert(tk.END, "Books saved to books.csv\n")
             # Show success message if data saved, otherwise an error message if no quotes to save.
 
@@ -115,6 +142,8 @@ class WebScraperApp:
 
 
 if __name__ == "__main__":
-    app_root = tk.Tk() # Initialises main application window using Tkinter.
+    app_root = tk.Tk()
+    # Initialises main application window using Tkinter.
     app = WebScraperApp(app_root)
-    app_root.mainloop() # app_root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.
+    app_root.mainloop()
+    # app_root.mainloop(): starts Tkinter event loop, which listens for events & updates GUI.
